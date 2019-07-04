@@ -1,0 +1,11 @@
+*.bin
+*.img
+*.lst
+*.sys
+*.map
+*.gas
+*.obj
+*.bim
+*.hrb
+bootpack.nas
+.vscode/
