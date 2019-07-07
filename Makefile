@@ -3,10 +3,10 @@ OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj
 TOOLPATH = ../z_tools2/
 INCPATH  = ../z_tools2/haribote/
 
-MAKE	 = make
+MAKE	 = ${TOOLPATH}make.exe
 NASK	 = ${TOOLPATH}nask.exe
 CC1      = ${TOOLPATH}cc1.exe -I${INCPATH} -Os -Wall -quiet
-CPP      = C:\MinGW\bin\g++ -std=c++17 -I../z_tools2/haribote/ -Os -Wall -nostdlib -fno-builtin -fno-exceptions -fno-rtti -B../z_tools2/ -c
+CPP      = ${TOOLPATH}c++ -std=c++17 -I../z_tools2/haribote/ -Os -Wall -nostdlib -fno-builtin -fno-exceptions -fno-rtti -B../z_tools2/ -c
 GAS2NASK = ${TOOLPATH}gas2nask.exe -a
 OBJ2BIM  = ${TOOLPATH}obj2bim.exe
 MAKEFONT = ${TOOLPATH}makefont.exe
