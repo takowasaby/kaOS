@@ -1,25 +1,22 @@
-OBJS_BOOTPACK = bootkaos.obj naskfunc.obj
+OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj
 
-TOOLPATH = ../z_tools/
-INCPATH  = ../z_tools/haribote/
-
-WINE     = wine
+TOOLPATH = ../z_tools2/
+INCPATH  = ../z_tools2/haribote/
 
 MAKE	 = make
-NASK	 = ${WINE} ${TOOLPATH}nask.exe
-CC1      = ${WINE} ${TOOLPATH}cc1.exe -I${INCPATH} -Os -Wall -quiet
-CPP      = g++ -I${INCPATH} -m32 -Os -Wall -nostdlib -fno-builtin -fno-exceptions -fno-rtti -B${TOOLPATH} -c
-LD		 = g++ -m32 -nostdlib -Wl,--oformat=binary
-GAS2NASK = ${WINE} ${TOOLPATH}gas2nask.exe -a
-OBJ2BIM  = ${WINE} ${TOOLPATH}obj2bim.exe
-MAKEFONT = ${WINE} ${TOOLPATH}makefont.exe
-BIN2OBJ  = ${WINE} ${TOOLPATH}bin2obj.exe
-BIM2HRB  = ${WINE} ${TOOLPATH}bim2hrb.exe
+NASK	 = ${TOOLPATH}nask.exe
+CC1      = ${TOOLPATH}cc1.exe -I${INCPATH} -Os -Wall -quiet
+CPP      = C:\MinGW\bin\g++ -std=c++17 -I../z_tools2/haribote/ -Os -Wall -nostdlib -fno-builtin -fno-exceptions -fno-rtti -B../z_tools2/ -c
+GAS2NASK = ${TOOLPATH}gas2nask.exe -a
+OBJ2BIM  = ${TOOLPATH}obj2bim.exe
+MAKEFONT = ${TOOLPATH}makefont.exe
+BIN2OBJ  = ${TOOLPATH}bin2obj.exe
+BIM2HRB  = ${TOOLPATH}bim2hrb.exe
 RULEFILE = ${TOOLPATH}haribote/haribote.rul
-EDIMG    = ${WINE} ${TOOLPATH}edimg.exe
-IMGTOL   = ${WINE} ${TOOLPATH}imgtol.com
-COPY     = cp
-DEL      = rm
+EDIMG    = ${TOOLPATH}edimg.exe
+IMGTOL   = ${TOOLPATH}imgtol.com
+COPY     = copy
+DEL      = del
 
 default :
 	${MAKE} img
@@ -30,11 +27,15 @@ ipl.bin : ipl.nas Makefile
 asmhead.bin : asmhead.nas Makefile
 	${NASK} asmhead.nas asmhead.bin asmhead.lst 
 
-bootpack.hrb : ${OBJS_BOOTPACK} Makefile
-	${LD} -o bootpack.hrb ${OBJS_BOOTPACK}
+bootpack.bim : ${OBJS_BOOTPACK} Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:bootpack.bim stack:3136k map:bootpack.map \
+		${OBJS_BOOTPACK}
+
+bootpack.hrb : bootpack.bim Makefile
+	$(BIM2HRB) bootpack.bim bootpack.hrb 0
 
 kaos.sys : asmhead.bin bootpack.hrb Makefile
-	cat asmhead.bin bootpack.hrb > kaos.sys 
+	copy /B asmhead.bin+bootpack.hrb kaos.sys 
 
 kaos.img : ipl.bin kaos.sys Makefile
 	${EDIMG} imgin:${TOOLPATH}fdimg0at.tek \
@@ -62,7 +63,9 @@ img :
 
 run : 
 	${MAKE} img
-	qemu-system-i386 -m 32 -localtime -fda kaos.img
+	${MAKE} clean
+	$(COPY) kaos.img ..\z_tools2\qemu\fdimage0.bin
+	$(MAKE) -C ..\z_tools2\qemu
 
 install :
 	${MAKE} img
@@ -79,4 +82,4 @@ clean :
 
 src_only :
 	${MAKE} clean
-	${DEL} kaos.img
+	-${DEL} kaos.img

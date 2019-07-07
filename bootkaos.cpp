@@ -1,12 +1,20 @@
-extern "C"
+#include "bootkaos.h"
+
+void HariMain(void)
 {
-    void io_hlt();
-};
+	unsigned char *vram;
+	int xsize, ysize;
+	struct BOOTINFO *binfo;
 
-int main(void)
-{
+	Palette(Palette::simplePalette()).set();
+	binfo = (struct BOOTINFO *) 0x0ff0;
+	xsize = binfo->scrnx;
+	ysize = binfo->scrny;
+	vram = binfo->vram;
 
-fin:
-    goto fin;
+	Screen(vram, xsize, ysize).drawBack();
 
+	for (;;) {
+		io_hlt();
+	}
 }

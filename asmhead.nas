@@ -171,7 +171,7 @@ pipelineflush:
 		CALL	memcpy
 skip:
 		MOV		ESP,[EBX+12]	; スタック初期値
-		JMP		DWORD 2*8:0x000001b5
+		JMP		DWORD 2*8:0x0000001b
 
 waitkbdout:
 		IN		 AL,0x64
