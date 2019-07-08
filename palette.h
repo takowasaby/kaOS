@@ -4,6 +4,9 @@
 
 class Palette
 {
+    constexpr static int PALETTE_WRITE_START_PORT = 0x03c8;
+    constexpr static int PALETTE_WRITE_GBA_PORT = 0x03c9;
+
 public:
     using Color = unsigned char;
 
@@ -26,9 +29,9 @@ public:
 
     struct PaletteData
     {
-        const Color* data_;
+        const unsigned int* data_;
         unsigned int size_;
-        PaletteData(const Color* data, unsigned int size);
+        PaletteData(const unsigned int* data, unsigned int size);
         PaletteData(const PaletteData& other);
         PaletteData& operator=(const PaletteData& other);
     };
@@ -40,7 +43,7 @@ public:
 private:
     PaletteData paletteData_;
 
-    constexpr static Color SIMPLE_RGB_TABLE[16 * 3] = {
+    constexpr static unsigned int SIMPLE_RGB_TABLE[16 * 3] = {
 		0x00, 0x00, 0x00,	/*  0:黒 */
 		0xff, 0x00, 0x00,	/*  1:明るい赤 */
 		0x00, 0xff, 0x00,	/*  2:明るい緑 */

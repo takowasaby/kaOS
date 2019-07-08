@@ -7,7 +7,7 @@ void HariMain(void)
 	struct BOOTINFO *binfo;
 
 	Palette(Palette::simplePalette()).set();
-	binfo = (struct BOOTINFO *) 0x0ff0;
+	binfo = (struct BOOTINFO *) BOOTINFO::LOAD_BOOTINFO_PORT;
 	xsize = binfo->scrnx;
 	ysize = binfo->scrny;
 	vram = binfo->vram;
