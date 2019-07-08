@@ -1,4 +1,4 @@
-OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj
+OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj hankaku.obj
 
 TOOLPATH = ../z_tools2/
 INCPATH  = ../z_tools2/haribote/
@@ -26,6 +26,12 @@ ipl.bin : ipl.nas Makefile
 
 asmhead.bin : asmhead.nas Makefile
 	${NASK} asmhead.nas asmhead.bin asmhead.lst 
+
+hankaku.bin : hankaku.txt Makefile
+	${MAKEFONT} hankaku.txt hankaku.bin
+
+hankaku.obj : hankaku.bin Makefile
+	${BIN2OBJ} hankaku.bin hankaku.obj _hankaku
 
 bootpack.bim : ${OBJS_BOOTPACK} Makefile
 	$(OBJ2BIM) @$(RULEFILE) out:bootpack.bim stack:3136k map:bootpack.map \

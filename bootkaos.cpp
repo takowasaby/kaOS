@@ -2,17 +2,16 @@
 
 void HariMain(void)
 {
-	unsigned char *vram;
-	int xsize, ysize;
 	struct BOOTINFO *binfo;
+	binfo = (struct BOOTINFO *) BOOTINFO::LOAD_BOOTINFO_PORT;
 
 	Palette(Palette::simplePalette()).set();
-	binfo = (struct BOOTINFO *) BOOTINFO::LOAD_BOOTINFO_PORT;
-	xsize = binfo->scrnx;
-	ysize = binfo->scrny;
-	vram = binfo->vram;
+	Screen screen(binfo->vram, binfo->scrnx, binfo->scrny);
 
-	Screen(vram, xsize, ysize).drawBack();
+	screen.drawBack();
+	screen.putfonts8_asc( 8,  8, Palette::COL8_FFFFFF, "ABC 123");
+	screen.putfonts8_asc(31, 31, Palette::COL8_000000, "King Warthur was a legendary leader");
+	screen.putfonts8_asc(30, 30, Palette::COL8_FFFFFF, "King Warthur was a legendary leader");
 
 	for (;;) {
 		io_hlt();
