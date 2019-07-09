@@ -1,4 +1,5 @@
-OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj hankaku.obj
+OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj hankaku.obj \
+	memory.obj
 
 TOOLPATH = ../z_tools2/
 INCPATH  = ../z_tools2/haribote/
@@ -15,6 +16,7 @@ BIM2HRB  = ${TOOLPATH}bim2hrb.exe
 RULEFILE = ${TOOLPATH}haribote/haribote.rul
 EDIMG    = ${TOOLPATH}edimg.exe
 IMGTOL   = ${TOOLPATH}imgtol.com
+QEMU     = ${TOOLPATH}qemu/qemu.exe
 COPY     = copy
 DEL      = del
 
@@ -71,7 +73,7 @@ run :
 	${MAKE} img
 	${MAKE} clean
 	$(COPY) kaos.img ..\z_tools2\qemu\fdimage0.bin
-	$(MAKE) -C ..\z_tools2\qemu
+	$(QEMU) -L ${TOOLPATH}qemu/ -m 64 -localtime -std-vga -fda ..\z_tools2\qemu\fdimage0.bin
 
 install :
 	${MAKE} img

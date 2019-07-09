@@ -3,6 +3,9 @@
 #include "naskfunc.h"
 #include "palette.h"
 #include "screen.h"
+#include "memory.h"
+
+#include "stdio.h"
 
 extern "C"
 {

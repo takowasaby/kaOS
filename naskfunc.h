@@ -7,4 +7,7 @@ extern "C"
     void io_out8(int port, int data);
     int  io_load_eflags(void);
     void io_store_eflags(int eflags);
+    int load_cr0(void);
+    void store_cr0(int cr0);
+    unsigned int memtest_sub(unsigned int start, unsigned int end);
 };
