@@ -1,4 +1,9 @@
+#pragma once
+
 #include "naskfunc.h"
+
+#include <string.h>
+#include <stdio.h>
 
 class Memory
 {
@@ -11,6 +16,7 @@ public:
     void free(void* address);
     unsigned int getTotalSize();
     unsigned int getFreeSize();
+    void dumpMemoryMap(char *dump);
 
     static unsigned int checkAllocableSize(unsigned int checkBeginAddress, unsigned int checkEndAddress);
 
@@ -26,19 +32,21 @@ private:
         FreeListElement *next_;
     public:
         bool allocate(unsigned int size, unsigned int allocateLimit);
-        bool free(unsigned int beginMemoryArea, unsigned int allocateLimit);
+        bool free(unsigned int beginMemoryArea, unsigned int allocateLimit, FreeListElement* freeListFirst);
         unsigned int getSize() const;
         unsigned int getTotalUseMemorySize() const;
         FreeListElement *getNext();
         void initializeFreeList(FreeListElement *entry);
 
     private:
+        void setSize(unsigned int size);
+
         void markFree();
         void markUsed();
         void markFreeListEnd();
         
         bool isAllocable(unsigned int size, unsigned int allocateLimit) const;
-        bool isFreeable(unsigned int allocateLimit);
+        bool isFreeable(unsigned int allocateLimit, FreeListElement* freeListFirst, FreeListElement** prev = nullptr);
 
         unsigned int *endToStoreSize();
 

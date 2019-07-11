@@ -1,6 +1,5 @@
 OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj hankaku.obj \
-	memory.obj
-
+	memory.obj debug.obj
 TOOLPATH = ../z_tools2/
 INCPATH  = ../z_tools2/haribote/
 

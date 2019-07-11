@@ -1,22 +1,24 @@
 #include "memory.h"
 
+#include "debug.h"
+
 bool Memory::FreeListElement::allocate(unsigned int size, unsigned int allocateLimit)
 {
     if (!isAllocable(size, allocateLimit)) return false;
-    if (getSize() - makeAllocateSize(size) >= sizeof(FreeListElement))
+    if (getSize() >=  makeAllocateSize(size) + sizeof(FreeListElement) + sizeof(unsigned int))
     {
         unsigned int willAllocateSize = makeTotalUseMemorySize(makeAllocateSize(size));
         
         FreeListElement *remainFreeMemory = reinterpret_cast<FreeListElement *>(reinterpret_cast<unsigned int>(this) + willAllocateSize);
-        remainFreeMemory->size_ = getSize() - willAllocateSize;
+        remainFreeMemory->setSize(getSize() - willAllocateSize);
         remainFreeMemory->prev_ = this->prev_;
         remainFreeMemory->next_ = this->next_;
+        remainFreeMemory->markFree();
 
         this->prev_->next_ = remainFreeMemory;
         this->next_->prev_ = remainFreeMemory;
 
-        this->size_ = makeAllocateSize(size);
-        *endToStoreSize() = makeAllocateSize(size);
+        this->setSize(makeAllocateSize(size));
     }
     else if (getSize() == FREE_LIST_END_SIZE)
     {
@@ -28,33 +30,35 @@ bool Memory::FreeListElement::allocate(unsigned int size, unsigned int allocateL
 
         this->prev_->next_ = freeListEnd;
 
-        this->size_ = makeAllocateSize(size);
-        *endToStoreSize() = makeAllocateSize(size);
+        this->setSize(makeAllocateSize(size));
     }
     else
     {
         this->prev_->next_ = this->next_;
         this->next_->prev_ = this->prev_;
-        markUsed();
     }
+    markUsed();
     return true;
 }
 
-bool Memory::FreeListElement::free(unsigned int beginMemoryArea, unsigned int allocateLimit)
+bool Memory::FreeListElement::free(unsigned int beginMemoryArea, unsigned int allocateLimit, FreeListElement* freeListFirst)
 {
-    if (!isFreeable(allocateLimit)) return false;
+    if (!isFreeable(allocateLimit, freeListFirst, &(this->prev_))) return false;
     if (size_ & FREE_MEMORY_BIT || size_ == FREE_LIST_END_SIZE) return false;
+    this->next_ = this->prev_->next_;
+    this->prev_->next_ = this;
+    this->next_->prev_ = this;
     FreeListElement *freeMemoryElement = this;
     unsigned int *prevAreaElemSize = reinterpret_cast<unsigned int *>(reinterpret_cast<unsigned int>(this) - sizeof(unsigned int));
     if (*prevAreaElemSize & FREE_MEMORY_BIT && 
         reinterpret_cast<unsigned int>(prevAreaElemSize) >= beginMemoryArea)
     {
-        freeMemoryElement = reinterpret_cast<FreeListElement *>(reinterpret_cast<unsigned int>(this) - makeTotalUseMemorySize((*prevAreaElemSize) & GET_SIZE_MASK));
-        freeMemoryElement->size_ += getTotalUseMemorySize();
+        freeMemoryElement = this->prev_;
+        freeMemoryElement->setSize(freeMemoryElement->getSize() + getTotalUseMemorySize());
         freeMemoryElement->next_ = this->next_;
         this->next_->prev_ = freeMemoryElement;
     }
-    FreeListElement *nextAreaElem = reinterpret_cast<FreeListElement *>(reinterpret_cast<unsigned int>(this) + getTotalUseMemorySize());
+    FreeListElement *nextAreaElem = reinterpret_cast<FreeListElement *>(reinterpret_cast<unsigned int>(freeMemoryElement) + freeMemoryElement->getTotalUseMemorySize());
     if (nextAreaElem->size_ & FREE_MEMORY_BIT)
     {
         if (nextAreaElem->getSize() == FREE_LIST_END_SIZE)
@@ -64,9 +68,9 @@ bool Memory::FreeListElement::free(unsigned int beginMemoryArea, unsigned int al
         }
         else
         {
-            freeMemoryElement->size_ += nextAreaElem->getTotalUseMemorySize();
             freeMemoryElement->next_ = nextAreaElem->next_;
             nextAreaElem->next_->prev_ = freeMemoryElement;
+            freeMemoryElement->setSize(freeMemoryElement->getSize() + nextAreaElem->getTotalUseMemorySize());
         }
     }
     freeMemoryElement->markFree();
@@ -93,6 +97,13 @@ void Memory::FreeListElement::initializeFreeList(Memory::FreeListElement *entry)
     prev_ = entry;
     entry->next_ = this;
     markFreeListEnd();
+}
+
+void Memory::FreeListElement::setSize(unsigned int size)
+{
+    unsigned int free_bit = size_ & FREE_MEMORY_BIT;
+    size_ = size | free_bit;
+    *endToStoreSize() = size | free_bit;
 }
 
 void Memory::FreeListElement::markFree()
@@ -123,11 +134,17 @@ bool Memory::FreeListElement::isAllocable(unsigned int size, unsigned int alloca
     return makeAllocateSize(size) <= getSize();
 }
 
-bool Memory::FreeListElement::isFreeable(unsigned int allocateLimit)
+bool Memory::FreeListElement::isFreeable(unsigned int allocateLimit, FreeListElement* freeListFirst, FreeListElement** prev)
 {
-    if (size_ < 16 || (size_ & 15) != 0) return false;
     if (reinterpret_cast<unsigned int>(this) + getTotalUseMemorySize() > allocateLimit) return false;
     if (size_ != (*endToStoreSize())) return false;
+    for (FreeListElement* elem = freeListFirst; 
+        reinterpret_cast<unsigned int>(elem) < reinterpret_cast<unsigned int>(this) && elem != nullptr;
+        elem = elem->next_)
+    {
+        if (!(elem->size_ & FREE_MEMORY_BIT) || elem->getSize() == FREE_LIST_END_SIZE) return false;
+        *prev = elem;
+    }
     return true;
 }
 
@@ -138,7 +155,7 @@ unsigned int *Memory::FreeListElement::endToStoreSize()
 
 unsigned int Memory::FreeListElement::makeAllocateSize(unsigned int size)
 {
-    return (size + 15) & 0xfffffff0;
+    return (size + 3) & 0xfffffffc;
 }
 unsigned int Memory::FreeListElement::makeTotalUseMemorySize(unsigned int size)
 {
@@ -176,7 +193,7 @@ void Memory::free(void *address)
     if (addressNumber < beginAddress_ || endAddress_ < addressNumber) return;
     FreeListElement *elem = reinterpret_cast<FreeListElement*>(addressNumber - sizeof(unsigned int));
     unsigned int freeSize = elem->getTotalUseMemorySize();
-    if (elem->free(beginAddress_, endAddress_))
+    if (elem->free(beginAddress_, endAddress_, freeListEntry_.getNext()))
     {
         freeSize_ += freeSize;
     }
@@ -190,6 +207,22 @@ unsigned int Memory::getTotalSize()
 unsigned int Memory::getFreeSize()
 {
     return freeSize_;
+}
+
+void Memory::dumpMemoryMap(char *dump)
+{
+    int dumpCursor = 0;
+    for (
+        FreeListElement* elem = reinterpret_cast<FreeListElement *>(beginAddress_);
+        ;
+        elem = reinterpret_cast<FreeListElement *>(reinterpret_cast<unsigned int>(elem) + elem->getTotalUseMemorySize())
+    ){
+        char buf[32];
+        sprintf(buf, "%x/%x/%x/%d ", reinterpret_cast<unsigned int>(elem), elem->getSize(), reinterpret_cast<unsigned int>(elem->getNext()), *(reinterpret_cast<unsigned int*>(elem)) & 0x00000001);
+        strcpy(dump + dumpCursor, buf);
+        dumpCursor += strlen(buf);
+        if (elem->getSize() == 0) break;
+    }
 }
 
 unsigned int Memory::checkAllocableSize(unsigned int checkBeginAddress, unsigned int checkEndAddress)
