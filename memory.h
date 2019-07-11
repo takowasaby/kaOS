@@ -54,8 +54,25 @@ private:
         static unsigned int makeTotalUseMemorySize(unsigned int size);
     };
 
-    const unsigned int beginAddress_;
-    const unsigned int endAddress_;
+    unsigned int beginAddress_;
+    unsigned int endAddress_;
     unsigned int freeSize_;
     FreeListElement freeListEntry_;
+
+private:
+    constexpr static unsigned int GLOBAL_MEMORY_ADDRESS = 0x2000;
+public:
+    static Memory *getInsPtr();
 };
+
+
+
+void* operator new(size_t size);
+void* operator new[](size_t size);
+void  operator delete(void* address);
+void  operator delete[](void* address);
+
+extern "C" {
+    void* malloc(size_t size);
+    void  free(void* address);
+}

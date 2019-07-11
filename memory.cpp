@@ -259,3 +259,55 @@ unsigned int Memory::checkAllocableSize(unsigned int checkBeginAddress, unsigned
 
 	return result;
 }
+
+Memory *Memory::getInsPtr()
+{
+    return reinterpret_cast<Memory *>(Memory::GLOBAL_MEMORY_ADDRESS);
+}
+
+
+
+void* operator new(size_t size) {
+    void* p = Memory::getInsPtr()->allocate(size);
+    if (p) {
+        memset(p, 0, size);
+    }
+    return p;
+}
+
+void operator delete(void* address) {
+    if (address) {
+        Memory::getInsPtr()->free(address);
+    }
+    return;
+}
+
+void* operator new[](size_t size) {
+    void* p = Memory::getInsPtr()->allocate(size);
+    if (p) {
+        memset(p, 0, size);
+    }
+    return p;
+}
+
+void operator delete[](void* address) {
+    if (address) {
+        Memory::getInsPtr()->free(address);
+    }
+    return;
+}
+
+void* malloc(size_t size) {
+    void* p = Memory::getInsPtr()->allocate(size);
+    if (p) {
+        memset(p, 0, size);
+    }
+    return p;
+}
+
+void free(void* address) {
+    if (address) {
+        Memory::getInsPtr()->free(address);
+    }
+    return;
+}
