@@ -4,6 +4,7 @@
 #include "palette.h"
 #include "screen.h"
 #include "memory.h"
+#include "vec.h"
 
 #include "stdio.h"
 

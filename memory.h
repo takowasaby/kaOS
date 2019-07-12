@@ -54,8 +54,8 @@ private:
         static unsigned int makeTotalUseMemorySize(unsigned int size);
     };
 
-    unsigned int beginAddress_;
-    unsigned int endAddress_;
+    const unsigned int beginAddress_;
+    const unsigned int endAddress_;
     unsigned int freeSize_;
     FreeListElement freeListEntry_;
 
@@ -67,12 +67,18 @@ public:
 
 
 
-void* operator new(size_t size);
-void* operator new[](size_t size);
-void  operator delete(void* address);
-void  operator delete[](void* address);
+extern "C" {
+    void *memcpy(void *__restrict__  s1, const void *__restrict__  s2, size_t n);
+}
+
+void *operator new(size_t size);
+void *operator new(size_t size, void *p);
+void *operator new[](size_t size);
+void  operator delete(void *address);
+void  operator delete(void *address, void *p);
+void  operator delete[](void *address);
 
 extern "C" {
-    void* malloc(size_t size);
+    void *malloc(size_t size);
     void  free(void* address);
 }

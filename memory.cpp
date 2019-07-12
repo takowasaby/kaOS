@@ -267,45 +267,69 @@ Memory *Memory::getInsPtr()
 
 
 
-void* operator new(size_t size) {
-    void* p = Memory::getInsPtr()->allocate(size);
+void *memcpy(void *__restrict__  s1, const void *__restrict__ s2, size_t n)
+{
+    if (n == 0) return s1;
+    char *ps1 = reinterpret_cast<char *>(s1);
+    const char *ps2 = reinterpret_cast<const char *>(s2);
+    const char *ps2end = ps2 + n;
+    do 
+        *ps1++ = *ps2++;
+    while (ps2 != ps2end);
+    return s1;
+}
+
+void *operator new(size_t size) {
+    void *p = Memory::getInsPtr()->allocate(size);
     if (p) {
         memset(p, 0, size);
     }
     return p;
 }
 
-void operator delete(void* address) {
+void *operator new(size_t size, void *p) {
+    if (p) {
+        memset(p, 0, size);
+    }
+    return p;
+}
+
+void operator delete(void *address) {
     if (address) {
         Memory::getInsPtr()->free(address);
     }
     return;
 }
 
-void* operator new[](size_t size) {
-    void* p = Memory::getInsPtr()->allocate(size);
+void  operator delete(void *address, void *p)
+{
+    return;
+}
+
+void *operator new[](size_t size) {
+    void *p = Memory::getInsPtr()->allocate(size);
     if (p) {
         memset(p, 0, size);
     }
     return p;
 }
 
-void operator delete[](void* address) {
+void operator delete[](void *address) {
     if (address) {
         Memory::getInsPtr()->free(address);
     }
     return;
 }
 
-void* malloc(size_t size) {
-    void* p = Memory::getInsPtr()->allocate(size);
+void *malloc(size_t size) {
+    void *p = Memory::getInsPtr()->allocate(size);
     if (p) {
         memset(p, 0, size);
     }
     return p;
 }
 
-void free(void* address) {
+void free(void *address) {
     if (address) {
         Memory::getInsPtr()->free(address);
     }
