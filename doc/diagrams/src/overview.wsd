@@ -1,0 +1,44 @@
+@startuml
+
+title Kernel
+
+class Debug {
+    +buf()
+    +out()
+}
+
+class Memory {
+    +allocate()
+    +free()
+}
+
+class Palette {
+    +set()
+    {static}+simplePalette()
+}
+
+class Screen {
+    +boxFill8()
+    +drawBack()
+}
+
+class TextDrawer {
+    +putfonts8_asc()
+    -putfont8()
+}
+
+class ShapeDrawer {
+    +boxFill8()
+}
+
+class CharImageDrawer {
+    {static}+getRule()
+    +setRule()
+    +draw()
+}
+
+Screen "1" *-- "1" TextDrawer
+Screen "1" *-- "1" ShapeDrawer
+Screen "1" *-- "1" CharImageDrawer
+
+@enduml
