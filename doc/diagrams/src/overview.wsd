@@ -34,7 +34,7 @@ class TextDrawer {
 }
 
 class ShapeDrawer {
-    +boxFill8()
+    +box()
 }
 
 class CharImageDrawer {
@@ -46,19 +46,17 @@ class Segment {
 }
 
 class SegmentDescriptorTable {
-    +add()
-    +at()
+    +set()
 }
 
 class Interupt {
 }
 
 class InteruptDescriptorTable {
-    +add()
+    +set()
 }
 
 KernelMain --> Screen
-KernelMain --> Memory
 KernelMain --> Palette
 KernelMain --> Segment
 KernelMain --> Interupt

@@ -31,6 +31,16 @@ void Screen::drawBack()
 	return;
 }
 
+int Screen::getXSize()
+{
+	return scrnx_;
+}
+
+int Screen::getYSize()
+{
+	return scrny_;
+}
+
 TextDrawer& Screen::text()
 {
 	return textDrawer_;

@@ -14,6 +14,9 @@ public:
     Screen(vram_type vram, const int scrnx, const int scrny, const color_type transparentColor);
     void drawBack();
 
+    int getXSize();
+    int getYSize();
+
     TextDrawer& text();
     ShapeDrawer& shape();
     ImageDrawer& image();
