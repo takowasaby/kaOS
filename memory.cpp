@@ -1,7 +1,5 @@
 #include "memory.h"
 
-#include "debug.h"
-
 bool Memory::FreeListElement::allocate(unsigned int size, unsigned int allocateLimit)
 {
     if (!isAllocable(size, allocateLimit)) return false;

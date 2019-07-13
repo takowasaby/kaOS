@@ -2,7 +2,7 @@
 
 title Kernel
 
-class Debug {
+class Buffer {
     +buf()
     +out()
 }
@@ -18,7 +18,9 @@ class Palette {
 }
 
 class Screen {
-    +boxFill8()
+    +shape()
+    +text()
+    +image()
     +drawBack()
 }
 
@@ -32,9 +34,7 @@ class ShapeDrawer {
 }
 
 class CharImageDrawer {
-    {static}+getRule()
-    +setRule()
-    +draw()
+    +mouse()
 }
 
 Screen "1" *-- "1" TextDrawer

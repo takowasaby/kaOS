@@ -1,6 +1,6 @@
 #pragma once
 
-#include "naskfunc.h"
+#include "../naskfunc.h"
 
 class Palette
 {
@@ -8,24 +8,24 @@ class Palette
     constexpr static int PALETTE_WRITE_GBA_PORT = 0x03c9;
 
 public:
-    using Color = unsigned char;
+    using color_type = unsigned char;
 
-    constexpr static Color COL8_000000 = 0;
-    constexpr static Color COL8_FF0000 = 1;
-    constexpr static Color COL8_00FF00 = 2;
-    constexpr static Color COL8_FFFF00 = 3;
-    constexpr static Color COL8_0000FF = 4;
-    constexpr static Color COL8_FF00FF = 5;
-    constexpr static Color COL8_00FFFF = 6;
-    constexpr static Color COL8_FFFFFF = 7;
-    constexpr static Color COL8_C6C6C6 = 8;
-    constexpr static Color COL8_840000 = 9;
-    constexpr static Color COL8_008400 = 10;
-    constexpr static Color COL8_848400 = 11;
-    constexpr static Color COL8_000084 = 12;
-    constexpr static Color COL8_840084 = 13;
-    constexpr static Color COL8_008484 = 14;
-    constexpr static Color COL8_848484 = 15;
+    constexpr static color_type COL8_000000 = 0;
+    constexpr static color_type COL8_FF0000 = 1;
+    constexpr static color_type COL8_00FF00 = 2;
+    constexpr static color_type COL8_FFFF00 = 3;
+    constexpr static color_type COL8_0000FF = 4;
+    constexpr static color_type COL8_FF00FF = 5;
+    constexpr static color_type COL8_00FFFF = 6;
+    constexpr static color_type COL8_FFFFFF = 7;
+    constexpr static color_type COL8_C6C6C6 = 8;
+    constexpr static color_type COL8_840000 = 9;
+    constexpr static color_type COL8_008400 = 10;
+    constexpr static color_type COL8_848400 = 11;
+    constexpr static color_type COL8_000084 = 12;
+    constexpr static color_type COL8_840084 = 13;
+    constexpr static color_type COL8_008484 = 14;
+    constexpr static color_type COL8_848484 = 15;
 
     struct PaletteData
     {

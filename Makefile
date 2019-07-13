@@ -1,5 +1,5 @@
-OBJS_BOOTPACK = bootkaos.obj naskfunc.obj palette.obj screen.obj hankaku.obj \
-	memory.obj debug.obj
+OBJS_BOOTPACK = bootkaos.obj naskfunc.obj graphic/palette.obj graphic/textDrawer.obj \
+	graphic/shapeDrawer.obj graphic/imageDrawer.obj graphic/screen.obj hankaku.obj memory.obj debug.obj
 TOOLPATH = ../z_tools2/
 INCPATH  = ../z_tools2/haribote/
 
@@ -86,6 +86,7 @@ clean :
 	-$(DEL) *.bim
 	-$(DEL) *.hrb
 	-$(DEL) *.sys
+	-$(DEL) graphic\*.obj
 
 src_only :
 	${MAKE} clean
