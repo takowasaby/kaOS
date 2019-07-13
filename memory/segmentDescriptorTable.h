@@ -22,8 +22,8 @@ private:
         void set(unsigned int limit, int base, int accessRight);
         void reset();
     private:
-        short limit_low_, base_low_;
-        char base_mid_, access_right_, limit_high_, base_high_;
+        short limitLow_, baseLow_;
+        char baseMid_, accessRight_, limitHigh_, baseHigh_;
     };
 
     SegmentDescriptor descriptors[MAX_SEGMENT_SIZE];

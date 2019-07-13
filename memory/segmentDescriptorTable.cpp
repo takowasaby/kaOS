@@ -23,20 +23,20 @@ void SegmentDescriptorTable::SegmentDescriptor::set(unsigned int limit, int base
         limit /= 0x1000;
     }
 
-    limit_low_ = limit & 0xffff;
-    base_low_ = base & 0xffff;
-    base_mid_ = (base >> 16) & 0xff;
-    access_right_ = accessRight & 0xff;
-    limit_high_ = ((limit >> 16) & 0x0f) | ((accessRight >> 8) & 0xf0);
-    base_high_ = (base >> 24) & 0xff;
+    limitLow_ = limit & 0xffff;
+    baseLow_ = base & 0xffff;
+    baseMid_ = (base >> 16) & 0xff;
+    accessRight_ = accessRight & 0xff;
+    limitHigh_ = ((limit >> 16) & 0x0f) | ((accessRight >> 8) & 0xf0);
+    baseHigh_ = (base >> 24) & 0xff;
 }
 
 void SegmentDescriptorTable::SegmentDescriptor::reset()
 {
-    limit_low_ = 0;
-    base_low_ = 0;
-    base_mid_ = 0;
-    access_right_ = 0;
-    limit_high_ = 0;
-    base_high_ = 0;
+    limitLow_ = 0;
+    baseLow_ = 0;
+    baseMid_ = 0;
+    accessRight_ = 0;
+    limitHigh_ = 0;
+    baseHigh_ = 0;
 }
