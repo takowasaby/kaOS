@@ -1,5 +1,6 @@
-OBJS_BOOTPACK = bootkaos.obj naskfunc.obj graphic/palette.obj graphic/textDrawer.obj \
-	graphic/shapeDrawer.obj graphic/imageDrawer.obj graphic/screen.obj hankaku.obj memory.obj debug.obj
+OBJS_BOOTPACK = bootkaos.obj naskfunc.obj hankaku.obj debug.obj \
+	graphic/palette.obj graphic/textDrawer.obj graphic/shapeDrawer.obj graphic/imageDrawer.obj graphic/screen.obj \
+	memory/memory.obj memory/segment.obj memory/segmentDescriptorTable.obj 
 TOOLPATH = ../z_tools2/
 INCPATH  = ../z_tools2/haribote/
 
@@ -72,7 +73,7 @@ run :
 	${MAKE} img
 	${MAKE} clean
 	$(COPY) kaos.img ..\z_tools2\qemu\fdimage0.bin
-	$(QEMU) -L ${TOOLPATH}qemu/ -m 64 -localtime -std-vga -fda ..\z_tools2\qemu\fdimage0.bin
+	$(QEMU) -L ${TOOLPATH}qemu/ -m 32 -localtime -std-vga -fda ..\z_tools2\qemu\fdimage0.bin
 
 install :
 	${MAKE} img
@@ -87,6 +88,7 @@ clean :
 	-$(DEL) *.hrb
 	-$(DEL) *.sys
 	-$(DEL) graphic\*.obj
+	-$(DEL) memory\*.obj
 
 src_only :
 	${MAKE} clean

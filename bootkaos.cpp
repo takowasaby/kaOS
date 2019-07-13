@@ -5,6 +5,9 @@
 void HariMain(void)
 {
 	new(Buffer::getInsPtr()) Buffer;
+	
+	Segment segment(Segment::SEGMENT_DESCRIPTOR_TABLE_ADDRES);
+	segment.setKernelSegment(0x0007ffff, 0x00280000);
 
 	unsigned int memtotal = Memory::checkAllocableSize(0x00400000, 0xbfffffff);
 	new(Memory::getInsPtr()) Memory(0x00400000, memtotal - 0x00400000);

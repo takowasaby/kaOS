@@ -1,6 +1,6 @@
 #pragma once
 
-#include "naskfunc.h"
+#include "../naskfunc.h"
 
 #include <string.h>
 #include <stdio.h>

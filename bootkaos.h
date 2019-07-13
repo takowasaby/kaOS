@@ -3,7 +3,8 @@
 #include "naskfunc.h"
 #include "graphic/palette.h"
 #include "graphic/screen.h"
-#include "memory.h"
+#include "memory/memory.h"
+#include "memory/segment.h"
 #include "vec.h"
 
 #include "stdio.h"

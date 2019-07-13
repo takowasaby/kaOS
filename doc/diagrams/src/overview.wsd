@@ -2,6 +2,10 @@
 
 title Kernel
 
+class KernelMain {
+    +KernelMain()
+}
+
 class Buffer {
     +buf()
     +out()
@@ -37,8 +41,31 @@ class CharImageDrawer {
     +mouse()
 }
 
+class Segment {
+    +setKernelSegment()
+}
+
+class SegmentDescriptorTable {
+    +add()
+    +at()
+}
+
+class Interupt {
+}
+
+class InteruptDescriptorTable {
+    +add()
+}
+
+KernelMain --> Screen
+KernelMain --> Memory
+KernelMain --> Palette
+KernelMain --> Segment
+KernelMain --> Interupt
 Screen "1" *-- "1" TextDrawer
 Screen "1" *-- "1" ShapeDrawer
 Screen "1" *-- "1" CharImageDrawer
+Segment "1" *-- "1" SegmentDescriptorTable
+Interupt "1" *-- "1" InteruptDescriptorTable
 
 @enduml
