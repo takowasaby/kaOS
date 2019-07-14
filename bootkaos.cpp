@@ -18,7 +18,7 @@ KernelMain::KernelMain(const BOOTINFO& bootinfo) :
 	palette_(Palette::simplePalette()),
 	screen_(bootinfo.vram, bootinfo.scrnx, bootinfo.scrny, 99),
 	segment_(Segment::SEGMENT_DESCRIPTOR_TABLE_ADDRES),
-	interupt_(Interupt::INTERUPT_DESCRIPTOR_TABLE_ADDRES)
+	interupt_(Interupt::INTERUPT_DESCRIPTOR_TABLE_ADDRES, Interupt::PIC0_FIRST_INTERUPT_NUMBER, Interupt::PIC1_FIRST_INTERUPT_NUMBER)
 {
 	segment_.setKernelSegment(0x0007ffff, 0x00280000);
 	palette_.set();

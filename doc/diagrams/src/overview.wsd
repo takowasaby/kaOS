@@ -3,7 +3,7 @@
 title Kernel
 
 class KernelMain {
-    +KernelMain()
+    +mainLoop()
 }
 
 class Buffer {
@@ -50,10 +50,17 @@ class SegmentDescriptorTable {
 }
 
 class Interupt {
+    +enableMouseInterupt()
+    +enableKeybordInterupt()
+    +enableTimerInterupt()
 }
 
 class InteruptDescriptorTable {
     +set()
+}
+
+class Pic {
+    +enableInterupt()
 }
 
 KernelMain --> Screen
@@ -63,6 +70,7 @@ KernelMain --> Interupt
 Screen "1" *-- "1" TextDrawer
 Screen "1" *-- "1" ShapeDrawer
 Screen "1" *-- "1" CharImageDrawer
+Interupt "1" *-- "1" Pic
 Segment "1" *-- "1" SegmentDescriptorTable
 Interupt "1" *-- "1" InteruptDescriptorTable
 

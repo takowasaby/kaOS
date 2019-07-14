@@ -1,15 +1,22 @@
 #include "interuptDescriptorTable.h"
+#include "pic.h"
 
 class Interupt
 {
 public:
     constexpr static unsigned int INTERUPT_DESCRIPTOR_TABLE_BYTE_SIZE = sizeof(InteruptDescriptorTable);
     constexpr static unsigned int INTERUPT_DESCRIPTOR_TABLE_ADDRES = 0x0026f800;
+    constexpr static unsigned char PIC0_FIRST_INTERUPT_NUMBER = 0x20;
+    constexpr static unsigned char PIC1_FIRST_INTERUPT_NUMBER = 0x28;
 
-    explicit Interupt(unsigned int interuptDescriptorTableAddress);
+    explicit Interupt(unsigned int interuptDescriptorTableAddress, unsigned char pic0INTFirst, unsigned char pic1INTFirst);
+    void enableMouseInterupt();
+    void enableKeyboardInterupt();
+    void enableTimerInterupt();
 
 private:
     InteruptDescriptorTable *idt_;
+    Pic pic_;
     unsigned int idtSize_;
 
 };
