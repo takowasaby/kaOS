@@ -7,6 +7,7 @@
 #include "memory/memory.h"
 #include "memory/segment.h"
 #include "vec.h"
+#include "queue.h"
 
 #include "stdio.h"
 

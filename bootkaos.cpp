@@ -31,14 +31,25 @@ void KernelMain::mainLoop()
 	screen_.text().putfonts8_asc(31, 31, Palette::COL8_000000, "King Warthur was a legendary leader");
 	screen_.text().putfonts8_asc(30, 30, Palette::COL8_FFFFFF, "King Warthur was a legendary leader");
 
-	Vec<int> vec(5);
-	vec.shrink_to_fit();
-	for (unsigned int i = 0; i < vec.size(); i++)
+	Queue<int> queue;
+	queue.enqueue(5);
+	queue.enqueue(4);
+	queue.enqueue(3);
+	queue.enqueue(2);
+	queue.enqueue(1);
+	queue.enqueue(5);
+	queue.enqueue(4);
+	queue.enqueue(3);
+	queue.enqueue(2);
+	queue.enqueue(1);
+	char integer[4];
+	for (unsigned int i = 0; i < 10; i++)
 	{
-		char integer[4];
-		sprintf(integer, "%d ", vec.capacity());
+		sprintf(integer, "%d ", queue.dequeue());
 		screen_.text().putfonts8_asc(8 + i * 8, 96, Palette::COL8_FFFFFF, integer);
 	}
+	sprintf(integer, "%d ", queue.size());
+	screen_.text().putfonts8_asc(8 + 80, 96, Palette::COL8_FFFFFF, integer);
 
 	Vec<char> sd(40);
 	char *s = new char[40];
