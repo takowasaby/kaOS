@@ -1,6 +1,8 @@
 #include "pic.h"
 
-Pic::Pic(unsigned char pic0INTFirst, unsigned char pic1INTFirst)
+Pic::Pic(unsigned char pic0INTFirst, unsigned char pic1INTFirst) :
+    pic0IMRCache_(0xfb),
+    pic1IMRCache_(0xff)
 {
     io_out8(PIC1_IMR,  0xff  );
     io_out8(PIC1_IMR,  0xff  );
@@ -49,5 +51,19 @@ void Pic::enableInterupt(IRQ irq)
             io_out8(PIC1_IMR, newPIC1IMR);
             pic1IMRCache_ = newPIC1IMR;
         }
+    }
+}
+
+void Pic::getInteruptNotice(IRQ irq)
+{
+    unsigned char irqNum = static_cast<unsigned char>(irq);
+    if (irqNum < 8) 
+    {
+        io_out8(PIC0_OCW2, 0x60 + irqNum);
+    }
+    else if (irqNum < 16)
+    {
+        io_out8(PIC0_OCW2, 0x62);
+        io_out8(PIC1_OCW2, 0x60 + irqNum - 8);
     }
 }

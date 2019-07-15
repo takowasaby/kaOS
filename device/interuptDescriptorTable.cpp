@@ -1,14 +1,12 @@
 #include "interuptDescriptorTable.h"
 
-#include "../debug.h"
-
 InteruptDescriptorTable::InteruptDescriptorTable()
 {
     for (unsigned int i = 0; i < MAX_SEGMENT_SIZE; i++)
     {
         descriptors[i].reset();
     }
-    load_gdtr(sizeof(InteruptDescriptorTable), reinterpret_cast<int>(this));
+    load_idtr(sizeof(InteruptDescriptorTable) - 1, reinterpret_cast<int>(this));
 }
 
 void InteruptDescriptorTable::set(unsigned int index, unsigned int offset, int selector, int accessRight)

@@ -1,14 +1,12 @@
 #include "segmentDescriptorTable.h"
 
-#include "../debug.h"
-
 SegmentDescriptorTable::SegmentDescriptorTable()
 {
     for (unsigned int i = 0; i < MAX_SEGMENT_SIZE; i++)
     {
         descriptors[i].reset();
     }
-    load_gdtr(sizeof(SegmentDescriptorTable), reinterpret_cast<int>(this));
+    load_gdtr(sizeof(SegmentDescriptorTable) - 1, reinterpret_cast<int>(this));
 }
 
 void SegmentDescriptorTable::set(unsigned int index, unsigned int limit, int base, int accessRight)

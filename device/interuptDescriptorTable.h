@@ -1,9 +1,13 @@
+#pragma once
+
 #include "../memory/memory.h"
 #include "../naskfunc.h"
 
 class InteruptDescriptorTable
 {
 public:
+    constexpr static int INT_GATE_AR = 0x008e;
+    
     constexpr static unsigned int MAX_SEGMENT_SIZE = 256;
 
     InteruptDescriptorTable();

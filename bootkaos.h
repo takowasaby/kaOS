@@ -2,6 +2,7 @@
 
 #include "naskfunc.h"
 #include "device/interupt.h"
+#include "device/interuptHandler.h"
 #include "graphic/palette.h"
 #include "graphic/screen.h"
 #include "memory/memory.h"
@@ -33,9 +34,9 @@ public:
 	KernelMain& operator=(const KernelMain&) = delete;
 
 private:
-	Palette palette_;
-	Screen screen_;
 	Segment segment_;
 	Interupt interupt_;
+	Palette palette_;
+	Screen screen_;
 
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../naskfunc.h"
 
 class Pic
@@ -25,6 +27,8 @@ public:
 
     Pic(unsigned char pic0INTFirst, unsigned char pic1INTFirst);
     void enableInterupt(IRQ irq);
+
+    static void getInteruptNotice(IRQ irq);
 
 private:
     constexpr static unsigned short PIC0_ICW1 = 0x0020;

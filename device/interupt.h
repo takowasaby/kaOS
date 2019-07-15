@@ -1,4 +1,7 @@
+#pragma once
+
 #include "interuptDescriptorTable.h"
+#include "interuptHandler.h"
 #include "pic.h"
 
 class Interupt
@@ -18,5 +21,7 @@ private:
     InteruptDescriptorTable *idt_;
     Pic pic_;
     unsigned int idtSize_;
+    const unsigned char pic0INTFirst_;
+    const unsigned char pic1INTFirst_;
 
 };

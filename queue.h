@@ -1,6 +1,6 @@
-#include "memory.h"
+#pragma once
 
-#include "debug.h"
+#include "memory/memory.h"
 
 template
 <class T>
@@ -49,9 +49,6 @@ public:
             size_type newi = front_ + 1;
             for (size_type i = front_ + 1; i != back_; i = newIndex(capacity_, i + 1), newi = newIndex(n, newi + 1))
             {
-                char s[16];
-                sprintf(s, "%d/%d ", i, newi);
-                Buffer::getInsPtr()->buf(s);
                 memcpy(newMemoryArea + newi, base_pointer_ + i, sizeof(T));
             }
             back_ = newi;
