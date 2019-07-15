@@ -13,9 +13,9 @@ public:
     constexpr static unsigned char PIC1_FIRST_INTERUPT_NUMBER = 0x28;
 
     explicit Interupt(unsigned int interuptDescriptorTableAddress, unsigned char pic0INTFirst, unsigned char pic1INTFirst);
-    void enableMouseInterupt();
-    void enableKeyboardInterupt();
-    void enableTimerInterupt();
+    void enableMouseInterupt(unsigned int segmentationNumber);
+    void enableKeyboardInterupt(unsigned int segmentationNumber);
+    void enableTimerInterupt(unsigned int segmentationNumber);
 
 private:
     InteruptDescriptorTable *idt_;

@@ -7,7 +7,7 @@ public:
     constexpr static unsigned int SEGMENT_DESCRIPTOR_TABLE_ADDRES = 0x00270000;
 
     explicit Segment(unsigned int segmentDescriptorTableAddress);
-    void setKernelSegment(unsigned int limit, int base);
+    unsigned int setKernelSegment(unsigned int limit, int base);
 
 private:
     SegmentDescriptorTable *gdt_;

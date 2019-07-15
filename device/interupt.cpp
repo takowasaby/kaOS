@@ -11,20 +11,20 @@ Interupt::Interupt(unsigned int interuptDescriptorTableAddress, unsigned char pi
     idt_->set(pic0INTFirst_ + static_cast<int>(Pic::IRQ::PARALLEL), reinterpret_cast<int>(asm_inthandler27), 2 << 3, InteruptDescriptorTable::INT_GATE_AR);
 }
 
-void Interupt::enableMouseInterupt()
+void Interupt::enableMouseInterupt(unsigned int segmentationNumber)
 {
-    idt_->set(pic1INTFirst_ + static_cast<int>(Pic::IRQ::MOUSE) % 8, reinterpret_cast<int>(asm_inthandler2c), 2 << 3, InteruptDescriptorTable::INT_GATE_AR);
+    idt_->set(pic1INTFirst_ + static_cast<int>(Pic::IRQ::MOUSE) % 8, reinterpret_cast<int>(asm_inthandler2c), segmentationNumber << 3, InteruptDescriptorTable::INT_GATE_AR);
     pic_.enableInterupt(Pic::IRQ::MOUSE);
 }
 
-void Interupt::enableKeyboardInterupt()
+void Interupt::enableKeyboardInterupt(unsigned int segmentationNumber)
 {
-    idt_->set(pic0INTFirst_ + static_cast<int>(Pic::IRQ::KEYBOARD), reinterpret_cast<int>(asm_inthandler21), 2 << 3, InteruptDescriptorTable::INT_GATE_AR);
+    idt_->set(pic0INTFirst_ + static_cast<int>(Pic::IRQ::KEYBOARD), reinterpret_cast<int>(asm_inthandler21), segmentationNumber << 3, InteruptDescriptorTable::INT_GATE_AR);
     pic_.enableInterupt(Pic::IRQ::KEYBOARD);
 }
 
-void Interupt::enableTimerInterupt()
+void Interupt::enableTimerInterupt(unsigned int segmentationNumber)
 {
-    idt_->set(pic0INTFirst_ + static_cast<int>(Pic::IRQ::TIMER), reinterpret_cast<int>(asm_inthandler20), 2 << 3, InteruptDescriptorTable::INT_GATE_AR);
+    idt_->set(pic0INTFirst_ + static_cast<int>(Pic::IRQ::TIMER), reinterpret_cast<int>(asm_inthandler20), segmentationNumber << 3, InteruptDescriptorTable::INT_GATE_AR);
     pic_.enableInterupt(Pic::IRQ::TIMER);
 }
