@@ -1,7 +1,7 @@
 OBJS_BOOTPACK = bootkaos.obj naskfunc.obj hankaku.obj debug.obj \
 	graphic/palette.obj graphic/textDrawer.obj graphic/shapeDrawer.obj graphic/imageDrawer.obj graphic/screen.obj \
 	memory/memory.obj memory/segment.obj memory/segmentDescriptorTable.obj \
-	device/interupt.obj device/interuptDescriptorTable.obj device/pic.obj device/interuptHandler.obj
+	device/interupt.obj device/interuptDescriptorTable.obj device/pic.obj device/interuptHandler.obj device/mouse.obj device/kbc.obj device/keyboard.obj
 TOOLPATH = ../z_tools2/
 INCPATH  = ../z_tools2/haribote/
 

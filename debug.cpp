@@ -5,7 +5,7 @@ Buffer *Buffer::getInsPtr()
     return reinterpret_cast<Buffer *>(Buffer::BUFFER_ADDRESS);
 }
 
-void Buffer::buf(const char *message)
+void Buffer::buff(const char *message)
 {
     strcpy(buf_ + end_, message);
     end_ += strlen(message);
@@ -13,6 +13,10 @@ void Buffer::buf(const char *message)
 char *Buffer::out()
 {
     return buf_;
+}
+bool Buffer::empty()
+{
+    return end_ == 0;
 }
 void Buffer::reset()
 {

@@ -11,7 +11,8 @@ private:
     unsigned int end_ = 0;
 public:
     static Buffer *getInsPtr();
-    void buf(const char *message);
+    void buff(const char *message);
     char *out();
+    bool empty();
     void reset();
 };

@@ -2,6 +2,8 @@
 
 title Kernel
 
+hide circle
+
 class KernelMain {
     +mainLoop()
 }
@@ -63,10 +65,29 @@ class Pic {
     +enableInterupt()
 }
 
+class Keyboard {
+    
+}
+
+class KBC {
+    +setMode()
+    +enableMouse()
+    +getKeyCode()
+}
+
+class Mouse {
+
+}
+
 KernelMain --> Screen
 KernelMain --> Palette
 KernelMain --> Segment
 KernelMain --> Interupt
+KernelMain --> Keyboard
+KernelMain --> Mouse
+KernelMain --> KBC
+Mouse --> KBC
+Keyboard --> KBC
 Screen "1" *-- "1" TextDrawer
 Screen "1" *-- "1" ShapeDrawer
 Screen "1" *-- "1" CharImageDrawer

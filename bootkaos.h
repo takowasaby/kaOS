@@ -3,6 +3,9 @@
 #include "naskfunc.h"
 #include "device/interupt.h"
 #include "device/interuptHandler.h"
+#include "device/kbc.h"
+#include "device/mouse.h"
+#include "device/keyboard.h"
 #include "graphic/palette.h"
 #include "graphic/screen.h"
 #include "memory/memory.h"
@@ -38,5 +41,8 @@ private:
 	Interupt interupt_;
 	Palette palette_;
 	Screen screen_;
+	KBC kbc_;
+	Keyboard keyboard_;
+	Mouse mouse_;
 
 };

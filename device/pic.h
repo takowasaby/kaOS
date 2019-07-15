@@ -5,6 +5,9 @@
 class Pic
 {
 public:
+    constexpr static unsigned int IRQ_SIZE = 8;
+    constexpr static unsigned int ALL_IRQ_SIZE = 16;
+
     enum class IRQ
     {
         TIMER,

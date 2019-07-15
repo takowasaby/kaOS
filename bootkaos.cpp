@@ -9,25 +9,23 @@ void HariMain(void)
 	unsigned int memtotal = Memory::checkAllocableSize(0x00400000, 0xbfffffff);
 	new(Memory::getInsPtr()) Memory(0x00400000, memtotal - 0x00400000);
 
-	new(reinterpret_cast<Queue<InteruptInfo> *>(INTERUPT_BUFFER_ADDRESS)) Queue<InteruptInfo>;
-
 	struct KernelMain::BOOTINFO *binfo = reinterpret_cast<KernelMain::BOOTINFO *>(KernelMain::BOOTINFO::LOAD_BOOTINFO_PORT);
 	KernelMain kernelMain(*binfo);
 	kernelMain.mainLoop();
 }
 
 KernelMain::KernelMain(const BOOTINFO& bootinfo) :
-	segment_(Segment::SEGMENT_DESCRIPTOR_TABLE_ADDRES),
+	segment_(Segment::SEGMENT_DESCRIPTOR_TABLE_ADDRES, 0x0007ffff, 0x00280000),
 	interupt_(Interupt::INTERUPT_DESCRIPTOR_TABLE_ADDRES, Interupt::PIC0_FIRST_INTERUPT_NUMBER, Interupt::PIC1_FIRST_INTERUPT_NUMBER),
 	palette_(Palette::simplePalette()),
-	screen_(bootinfo.vram, bootinfo.scrnx, bootinfo.scrny, 99)
+	screen_(bootinfo.vram, bootinfo.scrnx, bootinfo.scrny, 99),
+	kbc_(),
+	keyboard_(&kbc_, interupt_, segment_.getKernelSegmentNumber()),
+	mouse_(&kbc_, interupt_, segment_.getKernelSegmentNumber())
 {
-	segment_.setKernelSegment(0x0007ffff, 0x00280000);
 	palette_.set();
 	screen_.drawBack();
     io_sti();
-	interupt_.enableMouseInterupt();
-	interupt_.enableKeyboardInterupt();
 }
 
 void KernelMain::mainLoop()
@@ -73,16 +71,16 @@ void KernelMain::mainLoop()
 	Memory::getInsPtr()->dumpMemoryMap(dump);
 	screen_.text().putfonts8_asc(8, 256, Palette::COL8_FFFFFF, dump);
 
-	screen_.text().putfonts8_asc(8, 224, Palette::COL8_FFFFFF, Buffer::getInsPtr()->out());
-
-	unsigned int count = 0;
-	Queue<InteruptInfo> *fifo = reinterpret_cast<Queue<InteruptInfo> *>(INTERUPT_BUFFER_ADDRESS);
-	char str[4];
 	for (;;) {
-		if (fifo->size() != 0)
+		if (!Buffer::getInsPtr()->empty())
 		{
-			sprintf(str, "%d ", fifo->dequeue().interuptID_);
-			screen_.text().putfonts8_asc(8 + (count++ * 8), 128, Palette::COL8_FFFFFF, str);
+			screen_.shape().box(8, 224, screen_.getXSize() - 1, 240, Palette::COL8_008484);
+			screen_.text().putfonts8_asc(8, 224, Palette::COL8_FFFFFF, Buffer::getInsPtr()->out());
+			Buffer::getInsPtr()->reset();
+			//InteruptInfo interuptInfo = fifo->dequeue();
+			//sprintf(str, "%d/%d ", interuptInfo.interuptID_, interuptInfo.keycode_);
+			//screen_.shape().box(8, 128, 264, 144, Palette::COL8_008484);
+			//screen_.text().putfonts8_asc(8, 128, Palette::COL8_FFFFFF, str);
 		}
 		io_hlt();
 	}

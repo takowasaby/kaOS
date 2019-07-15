@@ -2,7 +2,6 @@
 
 #include "../naskfunc.h"
 #include "../queue.h"
-#include "pic.h"
 
 extern "C" 
 {
@@ -17,9 +16,4 @@ extern "C"
     void inthandler2c(int *esp);
 }
 
-struct InteruptInfo
-{
-    int interuptID_;
-};
-
-constexpr unsigned int INTERUPT_BUFFER_ADDRESS = 0x3000;
+constexpr unsigned short PORT_KEYDAT = 0x0060;
