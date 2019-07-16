@@ -55,19 +55,12 @@ void Interupt::setDevice(int interuptNumber, IDevice *device)
 
 void Interupt::onInterupt(int interuptNumber, int *esp)
 {
-    Buffer::getInsPtr()->buff("begin ");
     if (pic0INTFirst_ <= interuptNumber && interuptNumber < static_cast<int>(pic0INTFirst_ + Pic::IRQ_SIZE))
     {
-        char s[32];
-        sprintf(s, "%d ", interuptNumber - pic0INTFirst_);
-        Buffer::getInsPtr()->buff(s);
         pic_.getInteruptNotice(static_cast<Pic::IRQ>(interuptNumber - pic0INTFirst_));
     }
     else if (pic1INTFirst_ <= interuptNumber && interuptNumber < static_cast<int>(pic1INTFirst_ + Pic::IRQ_SIZE))
     {
-        char s[32];
-        sprintf(s, "%d ", interuptNumber - pic1INTFirst_);
-        Buffer::getInsPtr()->buff(s);
         pic_.getInteruptNotice(static_cast<Pic::IRQ>(interuptNumber - pic1INTFirst_ + Pic::IRQ_SIZE));
     }
     int size = devices_.size();
@@ -75,9 +68,11 @@ void Interupt::onInterupt(int interuptNumber, int *esp)
     {
         if (devices_[i].interuptNumber_ == interuptNumber)
         {
+            char s[32];
+            sprintf(s, "num:%d ", interuptNumber);
+            Buffer::getInsPtr()->buff(s);
             devices_[i].device_->onInterupt(esp);
             return;
         }
     }
-    Buffer::getInsPtr()->buff("end ");
 }

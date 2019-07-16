@@ -18,7 +18,7 @@ public:
     class IDevice
     {
     public:
-        virtual ~IDevice() = default;
+        //virtual ~IDevice();
         virtual void onInterupt(int *esp) = 0;
     };
 

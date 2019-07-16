@@ -2,8 +2,6 @@
 
 title Kernel
 
-hide circle
-
 class KernelMain {
     +mainLoop()
 }
@@ -57,6 +55,10 @@ class Interupt {
     +enableTimerInterupt()
 }
 
+interface Interupt::Idevice {
+    +onInterupt()
+}
+
 class InteruptDescriptorTable {
     +set()
 }
@@ -80,7 +82,7 @@ class Mouse {
 }
 
 KernelMain --> Screen
-KernelMain --> Palette
+KernelMain ---> Palette
 KernelMain --> Segment
 KernelMain --> Interupt
 KernelMain --> Keyboard
@@ -88,6 +90,9 @@ KernelMain --> Mouse
 KernelMain --> KBC
 Mouse --> KBC
 Keyboard --> KBC
+Mouse --|> Interupt::Idevice  
+Keyboard --|> Interupt::Idevice
+Interupt *-- Interupt::Idevice
 Screen "1" *-- "1" TextDrawer
 Screen "1" *-- "1" ShapeDrawer
 Screen "1" *-- "1" CharImageDrawer
